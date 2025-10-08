@@ -68,4 +68,6 @@ RUN chmod +x ./start.sh
 EXPOSE 8080
 
 # Start container using start.sh
-ENTRYPOINT ["./start.sh"]
+COPY ./start.sh ./start.sh
+ENTRYPOINT ["/bin/bash", "./start.sh"]
+
