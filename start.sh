@@ -1,16 +1,14 @@
-#!/bin/sh
+#!/bin/bash
+set -e
 
-# Wait for PostgreSQL to be ready
-echo "Waiting for database..."
-until npx prisma db pull; do
-  echo "DB not ready yet. Waiting 3 seconds..."
-  sleep 3
-done
+# Copy migrations
+rm -rf ./prisma/migrations
+cp -r ./prisma/postgresql-migrations ./prisma/migrations
 
-# Deploy Prisma migrations
-echo "Deploying migrations..."
+# Run Prisma migrations
+echo "Running Prisma migrations..."
 npx prisma migrate deploy --schema ./prisma/postgresql-schema.prisma
 
-# Start the Evolution API
-echo "Starting Evolution API..."
-npm run start:prod
+# Start the app
+echo "Starting app..."
+node dist/server.js
