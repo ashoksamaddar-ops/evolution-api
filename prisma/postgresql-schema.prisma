@@ -137,6 +137,7 @@ model Chat {
 }
 
 model Contact {
+  id Int @id @default(autoincrement())
   id            String    @id @default(cuid())
   remoteJid     String    @db.VarChar(100)
   pushName      String?   @db.VarChar(100)
@@ -152,6 +153,7 @@ model Contact {
 }
 
 model Message {
+  id Int @id @default(autoincrement())
   id                           String          @id @default(cuid())
   key                          Json            @db.JsonB
   pushName                     String?         @db.VarChar(100)
@@ -252,6 +254,7 @@ model Label {
 }
 
 model Proxy {
+  id Int @id @default(autoincrement())
   id         String    @id @default(cuid())
   enabled    Boolean   @default(false) @db.Boolean
   host       String    @db.VarChar(100)
