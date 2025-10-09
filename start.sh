@@ -12,3 +12,4 @@ npx prisma migrate deploy --schema ./prisma/postgresql-schema.prisma
 # Start the app
 echo "Starting app..."
 node dist/server.js
+
