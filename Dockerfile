@@ -38,7 +38,6 @@ COPY --from=builder /evolution/package*.json ./
 COPY --from=builder /evolution/node_modules ./node_modules
 COPY --from=builder /evolution/dist ./dist
 COPY --from=builder /evolution/prisma ./prisma
-# 💡 FIX: Copy the 'manager' folder (which contains the dashboard's index.html)
 COPY --from=builder /evolution/manager ./manager 
 COPY --from=builder /evolution/start.sh ./start.sh
 
