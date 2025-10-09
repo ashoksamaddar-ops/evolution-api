@@ -5,7 +5,7 @@
   "main": "./dist/main.js",
   "type": "commonjs",
   "scripts": {
-    "build": "tsup src/main.ts --out-dir dist --format cjs --external mediainfo.js,emoji-regex,@figuro/chatwoot-sdk,openai,compression,cors,multer,eventemitter2,https-proxy-agent,socks-proxy-agent,redis,minio,nats,socket.io,jsonwebtoken,kafkajs,amqplib,@aws-sdk/client-sqs",
+    "build": "tsup src/main.ts --out-dir dist --format cjs --external mediainfo.js,emoji-regex,@figuro/chatwoot-sdk,openai,@sentry/node,compression,cors,multer,eventemitter2,https-proxy-agent,socks-proxy-agent,redis,minio,nats,socket.io,jsonwebtoken,kafkajs,amqplib,@aws-sdk/client-sqs",
     "start": "node dist/main.js",
     "start:prod": "node dist/main.js",
     "dev:server": "tsx watch src/server.ts",
@@ -60,7 +60,7 @@
     "fluent-ffmpeg": "^2.1.2",
     "tsup": "^8.3.5",
     "typescript": "^5.7.2",
-    "@sentry/node": "^7.112.2"  <--- ADDED THIS BACK TO DEPENDENCIES
+    "@sentry/node": "^7.112.2"
   },
   "devDependencies": {
     "@types/node": "^24.5.2"
