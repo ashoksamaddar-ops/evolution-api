@@ -29,9 +29,6 @@ RUN npx prisma generate --schema=./prisma/postgresql-schema.prisma
 # Build the TypeScript project
 RUN npm run build
 
-# ----------------------------
-# 2️⃣ Production Image
-# ----------------------------
 FROM node:20-alpine AS runner
 
 WORKDIR /evolution
@@ -41,6 +38,8 @@ COPY --from=builder /evolution/package*.json ./
 COPY --from=builder /evolution/node_modules ./node_modules
 COPY --from=builder /evolution/dist ./dist
 COPY --from=builder /evolution/prisma ./prisma
+# 💡 FIX: Copy the 'manager' folder (which contains the dashboard's index.html)
+COPY --from=builder /evolution/manager ./manager 
 COPY --from=builder /evolution/start.sh ./start.sh
 
 # Make sure start.sh is executable
