@@ -6,7 +6,7 @@ FROM node:24-alpine AS builder
 RUN apk update && \
     apk add --no-cache git ffmpeg wget curl bash openssl dos2unix
 
-LABEL version="2.3.1" description="Api to control whatsapp features through http requests." 
+LABEL version="2.3.1" description="Api to control whatsapp features through http requests."
 LABEL maintainer="Davidson Gomes" git="https://github.com/DavidsonGomes"
 LABEL contact="contato@evolution-api.com"
 
@@ -30,6 +30,9 @@ COPY ./Docker ./Docker
 
 RUN chmod +x ./Docker/scripts/* && dos2unix ./Docker/scripts/*
 
+# ✅ Generate Prisma client BEFORE build
+RUN npx prisma generate
+
 # Build the project
 RUN npm run build
 
@@ -39,7 +42,7 @@ RUN npm run build
 FROM node:24-alpine AS final
 
 RUN apk update && \
-    apk add tzdata ffmpeg bash openssl dos2unix
+    apk add --no-cache tzdata ffmpeg bash openssl dos2unix
 
 ENV TZ=America/Sao_Paulo
 ENV DOCKER_ENV=true
@@ -62,15 +65,9 @@ COPY --from=builder /evolution/tsup.config.ts ./tsup.config.ts
 # ----------------------------
 # Add start script for runtime migration
 # ----------------------------
-# Add start script for runtime migration
 COPY start.sh /start.sh
-RUN apt-get update && apt-get install -y dos2unix && dos2unix /start.sh && chmod +x /start.sh
-CMD ["/start.sh"]
-
+RUN dos2unix /start.sh && chmod +x /start.sh
 
 EXPOSE 8080
 
-# Start container using start.sh
-COPY ./start.sh ./start.sh
-ENTRYPOINT ["/bin/bash", "./start.sh"]
-
+CMD ["/start.sh"]
