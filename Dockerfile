@@ -23,7 +23,8 @@ RUN npm ci --silent
 COPY ./prisma ./prisma
 
 # ✅ Generate Prisma client BEFORE build
-RUN npx prisma generate
+RUN npx prisma generate --schema=./prisma/postgresql-schema.prisma
+
 
 # Copy rest of source code
 COPY ./src ./src
