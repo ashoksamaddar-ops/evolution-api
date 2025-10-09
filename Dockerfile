@@ -17,7 +17,7 @@ COPY ./package*.json ./
 COPY ./tsconfig.json ./
 COPY ./tsup.config.ts ./
 
-RUN npm ci --silent
+RUN npm install
 
 # Copy Prisma schema before generating client
 COPY ./prisma ./prisma
