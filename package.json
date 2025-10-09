@@ -60,7 +60,9 @@
     "fluent-ffmpeg": "^2.1.2",
     "tsup": "^8.3.5",
     "typescript": "^5.7.2",
-    "@sentry/node": "^7.112.2"
+    "@sentry/node": "^7.112.2",
+    "redis": "^4.6.13",
+    "socket.io": "^4.7.5"
   },
   "devDependencies": {
     "@types/node": "^24.5.2"
