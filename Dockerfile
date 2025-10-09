@@ -62,8 +62,9 @@ COPY --from=builder /evolution/tsup.config.ts ./tsup.config.ts
 # ----------------------------
 # Add start script for runtime migration
 # ----------------------------
-COPY ./start.sh ./start.sh
-RUN chmod +x ./start.sh
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+CMD ["/start.sh"]
 
 EXPOSE 8080
 
