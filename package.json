@@ -2,11 +2,11 @@
   "name": "evolution-api",
   "version": "2.3.4",
   "description": "REST API for communication with WhatsApp",
-  "main": "./dist/server.js",
+  "main": "./dist/main.js",  // <--- FIX #1: Change 'server.js' to 'main.js'
   "type": "commonjs",
   "scripts": {
- "build": "tsup src/main.ts --out-dir dist --format cjs --external mediainfo.js,emoji-regex,@figuro/chatwoot-sdk,openai,@sentry/node,compression,cors,multer,eventemitter2,https-proxy-agent,socks-proxy-agent,redis,minio,nats,socket.io,jsonwebtoken,kafkajs,amqplib,@aws-sdk/client-sqs",
-    "start": "tsx src/main.ts",
+    "build": "tsup src/main.ts --out-dir dist --format cjs --external mediainfo.js,emoji-regex,@figuro/chatwoot-sdk,openai,@sentry/node,compression,cors,multer,eventemitter2,https-proxy-agent,socks-proxy-agent,redis,minio,nats,socket.io,jsonwebtoken,kafkajs,amqplib,@aws-sdk/client-sqs",
+    "start": "node dist/main.js",  // <--- FIX #2: Change to run the built code directly
     "start:prod": "node dist/main.js",
     "dev:server": "tsx watch src/server.ts",
     "test": "tsx watch test/all.test.ts",
