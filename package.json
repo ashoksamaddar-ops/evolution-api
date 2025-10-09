@@ -5,8 +5,8 @@
   "main": "./dist/server.js",
   "type": "commonjs",
   "scripts": {
-    "build": "tsup src/server.ts --out-dir dist --format cjs",
-    "start": "tsx src/server.ts",
+   "build": "tsup src/main.ts --out-dir dist --format cjs",
+    "start": "tsx src/main.ts",
     "start:prod": "node dist/server.js",
     "dev:server": "tsx watch src/server.ts",
     "test": "tsx watch test/all.test.ts",
