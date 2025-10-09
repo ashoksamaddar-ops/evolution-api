@@ -2,7 +2,7 @@
   "name": "evolution-api",
   "version": "2.3.4",
   "description": "REST API for communication with WhatsApp",
-  "main": "./dist/main.js",  
+  "main": "./dist/main.js",
   "type": "commonjs",
   "scripts": {
     "build": "tsup src/main.ts --out-dir dist --format cjs --external mediainfo.js,emoji-regex,@figuro/chatwoot-sdk,openai,compression,cors,multer,eventemitter2,https-proxy-agent,socks-proxy-agent,redis,minio,nats,socket.io,jsonwebtoken,kafkajs,amqplib,@aws-sdk/client-sqs",
@@ -59,7 +59,8 @@
     "@paralleldrive/cuid2": "^2.2.2",
     "fluent-ffmpeg": "^2.1.2",
     "tsup": "^8.3.5",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "@sentry/node": "^7.112.2"  <--- ADDED THIS BACK TO DEPENDENCIES
   },
   "devDependencies": {
     "@types/node": "^24.5.2"
