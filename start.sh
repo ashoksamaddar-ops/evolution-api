@@ -1,4 +1,5 @@
 # /usr/bin/env bash
+# /usr/bin/env bash
 #!/bin/bash
 
 set -e
@@ -13,5 +14,5 @@ npx prisma migrate deploy --schema ./prisma/postgresql-schema.prisma
 
 # Start the app
 echo "Starting app..."
-node dist/server.js
+node dist/main.js
 
