@@ -13,9 +13,9 @@ COPY package*.json ./
 
 # Disable Husky (Git hooks) to prevent error 127
 ENV HUSKY=0
-
+ENV CI=true
 # Install dependencies quietly
-RUN npm ci --silent
+RUN npm install --ignore-scripts --no-audit --no-fund
 
 # Copy the rest of the app
 COPY . .
