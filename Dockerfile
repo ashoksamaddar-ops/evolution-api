@@ -1,40 +1,56 @@
 # ----------------------------
-# Builder Stage
+# 1️⃣ Base Build Stage
 # ----------------------------
-FROM node:24-alpine AS builder
+FROM node:20-alpine AS builder
 
-RUN apk update && \
-    apk add --no-cache git ffmpeg wget curl bash openssl dos2unix
-
-LABEL version="2.3.1" description="API to control WhatsApp features through HTTP requests."
-LABEL maintainer="Davidson Gomes" git="https://github.com/DavidsonGomes"
-LABEL contact="contato@evolution-api.com"
+# Install necessary tools
+RUN apk add --no-cache bash dos2unix git openssl ffmpeg
 
 WORKDIR /evolution
 
-# Install dependencies
-COPY ./package*.json ./
-COPY ./tsconfig.json ./
-COPY ./tsup.config.ts ./
+# Copy dependency files
+COPY package*.json ./
 
-RUN npm install
+# Disable Husky (Git hooks) to prevent error 127
+ENV HUSKY=0
 
-# Copy Prisma schema before generating client
-COPY ./prisma ./prisma
+# Install dependencies quietly
+RUN npm ci --silent
 
-# ✅ Generate Prisma client BEFORE build
+# Copy the rest of the app
+COPY . .
+
+# Ensure all shell scripts are Unix-compatible
+RUN find . -type f -name "*.sh" -exec dos2unix {} \;
+
+# Generate Prisma client from schema
 RUN npx prisma generate --schema=./prisma/postgresql-schema.prisma
 
-
-# Copy rest of source code
-COPY ./src ./src
-COPY ./public ./public
-COPY ./manager ./manager
-COPY ./.env.example ./.env
-COPY ./runWithProvider.js ./
-COPY ./Docker ./Docker
-
-RUN chmod +x ./Docker/scripts/* && dos2unix ./Docker/scripts/*
-
-# Build the project
+# Build the TypeScript project
 RUN npm run build
+
+# ----------------------------
+# 2️⃣ Production Image
+# ----------------------------
+FROM node:20-alpine AS runner
+
+WORKDIR /evolution
+
+# Copy necessary runtime files from builder
+COPY --from=builder /evolution/package*.json ./
+COPY --from=builder /evolution/node_modules ./node_modules
+COPY --from=builder /evolution/dist ./dist
+COPY --from=builder /evolution/prisma ./prisma
+COPY --from=builder /evolution/start.sh ./start.sh
+
+# Make sure start.sh is executable
+RUN chmod +x ./start.sh
+
+# Environment
+ENV NODE_ENV=production
+
+# Expose app port (change if your app uses another)
+EXPOSE 3000
+
+# Start script
+CMD ["./start.sh"]
