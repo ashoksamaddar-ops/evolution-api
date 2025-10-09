@@ -30,7 +30,7 @@ COPY ./Docker ./Docker
 
 RUN chmod +x ./Docker/scripts/* && dos2unix ./Docker/scripts/*
 
-+ # Generate Prisma client BEFORE build
+# Generate Prisma client BEFORE build
 RUN npx prisma generate
 
 # Build the project
