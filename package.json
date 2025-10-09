@@ -7,7 +7,7 @@
   "scripts": {
  "build": "tsup src/main.ts --out-dir dist --format cjs --external mediainfo.js,emoji-regex,@figuro/chatwoot-sdk,openai,@sentry/node,compression,cors,multer,eventemitter2,https-proxy-agent,socks-proxy-agent,redis,minio,nats,socket.io,jsonwebtoken,kafkajs,amqplib,@aws-sdk/client-sqs",
     "start": "tsx src/main.ts",
-    "start:prod": "node dist/server.js",
+    "start:prod": "node dist/main.js",
     "dev:server": "tsx watch src/server.ts",
     "test": "tsx watch test/all.test.ts",
     "lint": "eslint --fix --ext .ts src",
