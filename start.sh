@@ -1,16 +1,9 @@
-# /usr/bin/env bash
-#!/bin/bash
-
-set -e
-
-# Copy migrations
-rm -rf ./prisma/migrations
-cp -r ./prisma/postgresql-migrations ./prisma/migrations
-
-# Run Prisma migrations
-echo "Running Prisma migrations..."
-npx prisma migrate deploy --schema ./prisma/postgresql-schema.prisma
-
-# Start the app
-echo "Starting app..."
-node dist/main.js
+AUTHENTICATION_API_KEY=myStrongSecretKey123
+DATABASE_PROVIDER=postgresql
+DATABASE_CONNECTION_URI=postgresql://evo_db_xiie_user:QZuLyVEFoJRNjdekQaHp3omsPCYrj9AH@dpg-d3j3kc3ipnbc73eihq8g-a/evo_db_xiie
+INSTANCE_MODE=single
+Key=HUSKY
+LOG_LEVEL=info
+NODE_ENV=production
+PORT=3000
+Value=0
