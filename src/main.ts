@@ -135,6 +135,11 @@ async function bootstrap() {
 
   const httpServer = configService.get<HttpServer>('SERVER');
 
+  // --- CRITICAL FIX: Use the hosting environment's PORT if available ---
+  // This overrides the configured port with the environment variable's value (e.g., Render's PORT)
+  httpServer.PORT = process.env.PORT || httpServer.PORT;
+  // ---------------------------------------------------------------------
+
   ServerUP.app = app;
   let server = ServerUP[httpServer.TYPE];
 
