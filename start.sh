@@ -1,9 +1,13 @@
 #!/bin/bash
 
+# --- Set Working Directory ---
+# Navigate to the /evolution folder where the code and node_modules are located.
+# This ensures that 'npx' and 'node' can find the necessary files.
+cd /evolution
+
 # --- 1. Database Migration ---
-# This command ensures any pending database changes (migrations) are 
-# applied to the connected PostgreSQL database before the server starts.
 echo "Applying Prisma database migrations..."
+# 'npx' uses the local node_modules which should be in the current directory now.
 npx prisma migrate deploy
 
 # Check if the migration command was successful
@@ -13,10 +17,6 @@ if [ $? -ne 0 ]; then
 fi
 
 # --- 2. Start Application ---
-# This command starts your compiled Node.js application. 
-# We assume 'dist/main.js' is the entry file created by 'npm run build'.
+# The application entry file is run relative to the current working directory (/evolution).
 echo "Starting evolution-api server..."
 node dist/main.js
-
-# Note: The 'chmod +x ./start.sh' command in your build log means this 
-# script is already marked as executable, which is correct.
