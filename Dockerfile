@@ -51,4 +51,6 @@ ENV NODE_ENV=production
 EXPOSE 3000
 
 # Start script
-CMD ["./start.sh"]
+# CRITICAL FIX: Changed "./start.sh" to the absolute path 
+# "/evolution/start.sh" to prevent the "not found" error during runtime.
+CMD ["/evolution/start.sh"]
