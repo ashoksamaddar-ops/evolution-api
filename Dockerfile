@@ -3,7 +3,7 @@
 # ----------------------------
 FROM node:20-alpine AS builder
 
-# Install necessary tools
+# Install necessary tools. bash and dos2unix are needed for the build stage.
 RUN apk add --no-cache bash dos2unix git openssl ffmpeg
 
 WORKDIR /evolution
@@ -29,6 +29,9 @@ RUN npx prisma generate --schema=./prisma/postgresql-schema.prisma
 # Build the TypeScript project
 RUN npm run build
 
+# ----------------------------
+# 2️⃣ Runtime Stage
+# ----------------------------
 FROM node:20-alpine AS runner
 
 WORKDIR /evolution
@@ -50,7 +53,5 @@ ENV NODE_ENV=production
 # Expose app port (change if your app uses another)
 EXPOSE 3000
 
-# Start script
-# CRITICAL FIX: Changed "./start.sh" to the absolute path 
-# "/evolution/start.sh" to prevent the "not found" error during runtime.
+# Start script: Use absolute path to bypass working directory confusion
 CMD ["/evolution/start.sh"]
