@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # --- Set Working Directory ---
 # Navigate to the /evolution folder where the code and node_modules are located.
