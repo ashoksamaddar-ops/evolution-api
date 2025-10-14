@@ -1,14 +1,16 @@
 #!/bin/sh
 
-# --- Set Working Directory ---
-# Navigate to the /evolution folder where the code and node_modules are located.
-# This ensures that 'npx' and 'node' can find the necessary files.
+# This script is designed to run inside the node:20-alpine Docker container.
+
+# --- Set Working Directory (Safety check) ---
+# Ensure we are in the application root, though the absolute path below makes this less critical.
 cd /evolution
 
 # --- 1. Database Migration ---
 echo "Applying Prisma database migrations..."
-# 'npx' uses the local node_modules which should be in the current directory now.
-npx prisma migrate deploy
+# CRITICAL FIX: Use the ABSOLUTE path from the root of the container.
+# This eliminates ambiguity and reliably finds the schema file.
+npx prisma migrate deploy --schema=/evolution/prisma/postgresql-schema.prisma
 
 # Check if the migration command was successful
 if [ $? -ne 0 ]; then
@@ -17,6 +19,5 @@ if [ $? -ne 0 ]; then
 fi
 
 # --- 2. Start Application ---
-# The application entry file is run relative to the current working directory (/evolution).
 echo "Starting evolution-api server..."
 node dist/main.js
