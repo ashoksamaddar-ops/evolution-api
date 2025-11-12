@@ -1,25 +1,22 @@
-# ... (your existing code)
+#!/bin/bash
+set -e
 
-# --- 2️⃣ Try migrations, fall back to db push for brand-new DBs ---
-echo "Applying Prisma migrations..."
-# Attempt 1: Deploy migrations (for existing projects)
-if ! npx prisma migrate deploy --schema=/evolution/prisma/postgresql-schema.prisma; then
-  echo "⚠️ Migration deployment failed or no migrations found. Attempting to create tables with db push..."
-  # Attempt 2: Push schema (for brand-new DBs/initial setup)
-  npx prisma db push --schema=/evolution/prisma/postgresql-schema.prisma
-  if [ $? -eq 0 ]; then
-    echo "✅ Database schema pushed successfully."
-  else
-    echo "❌ ERROR: Prisma db push failed. Check DATABASE_CONNECTION_URI and permissions."
-    exit 1 # Stop execution if db push fails
-  fi
+# --- 0. CRITICAL: Validate Environment Variable Presence ---
+if [ -z "$DATABASE_CONNECTION_URI" ]; then
+    echo "❌ ERROR: DATABASE_CONNECTION_URI environment variable is NOT SET."
+    echo "Please set this variable in your hosting platform's environment settings."
+    exit 1 
 fi
-# --- Schema sync complete ---
+echo "✅ DATABASE_CONNECTION_URI is present."
 
-# Add a small delay for good measure, just in case.
-echo "Waiting 5 seconds for database readiness..."
-sleep 5
+# --- 1. Generate Prisma Client from schema ---
+echo "Running prisma generate..."
+npx prisma generate
 
-# --- 3️⃣ Launch server ---
-echo "🚀 Launching Evolution API on port $PORT"
+# --- 2. Apply Schema to Database (This command uses the environment variable) ---
+echo "Applying Prisma schema (db push)..."
+npx prisma db push --accept-data-loss
+
+# --- 3. Launch the Server ---
+echo "🚀 Starting application..."
 exec node dist/main.js
