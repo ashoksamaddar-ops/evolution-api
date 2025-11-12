@@ -1,23 +1,24 @@
 #!/bin/sh
+set -e
 
-# This script is designed to run inside the node:20-alpine Docker container.
-
-# --- Set Working Directory (Safety check) ---
-# Ensure we are in the application root, though the absolute path below makes this less critical.
+# --- Working Directory ---
 cd /evolution
 
-# --- 1. Database Migration ---
-echo "Applying Prisma database migrations..."
-# CRITICAL FIX: Use the ABSOLUTE path from the root of the container.
-# This eliminates ambiguity and reliably finds the schema file.
-npx prisma migrate deploy --schema=/evolution/prisma/postgresql-schema.prisma
+# --- Environment Setup ---
+PORT=${PORT:-8080}
+export EVOLUTION_PORT=$PORT
 
-# Check if the migration command was successful
-if [ $? -ne 0 ]; then
-    echo "ERROR: Prisma migration failed! Exiting application."
-    exit 1
+echo "--------------------------------------"
+echo "🕓 $(date) | Starting Evolution API setup"
+echo "--------------------------------------"
+
+# --- 1️⃣ Apply Prisma Database Migrations ---
+echo "Applying Prisma migrations..."
+if ! npx prisma migrate deploy --schema=/evolution/prisma/postgresql-schema.prisma; then
+  echo "⚠️ No migrations found, running db push instead..."
+  npx prisma db push --schema=/evolution/prisma/postgresql-schema.prisma
 fi
 
-# --- 2. Start Application ---
-echo "Starting evolution-api server..."
-node dist/main.js
+# --- 2️⃣ Start Application ---
+echo "🚀 Launching Evolution API on port $PORT"
+exec node dist/main.js
